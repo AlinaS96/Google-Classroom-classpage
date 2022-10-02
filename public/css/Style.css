@@ -1,0 +1,349 @@
+html {
+  background-color: #ffffff;
+  min-height: 1000px;
+}
+
+.section {
+  color: rgb(0, 0, 0);
+  padding-left: 52px; 
+  font-size: 12px; 
+  margin: 0;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  display: block;
+}
+
+.class-name{
+  color: #000;
+  font-size: 16px;
+  margin:0;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  display: inline-block;
+}
+
+#heading {
+  width: 100%;
+  height: 64px;
+  padding-left: 13px; 
+  border-bottom: 0.0625rem solid #e0e0e0;
+  border-bottom-width: 1px;
+  padding-bottom: 6px;
+  margin-bottom: 10px ;
+  position: fixed;
+  top: 0; 
+  left:0;
+  right:0; 
+  z-index: 100;
+  background-color: #ffffff;
+} 
+
+.menu{
+  display: inline;
+  border: none;
+  background-color: #fff;
+  opacity: 0.7;
+  transition: 0.3s;
+  height: 45px; 
+  width: 45px; 
+  margin-top: 10px;
+  border-radius: 50%;
+}
+
+.menu:active{
+  background-color: rgb(214, 214, 214);
+}
+
+.wall{
+  margin-top: 88px;
+  margin-bottom: 25px;
+  width: 82.85%;
+  height: 245px; 
+  border-radius: 8px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  color: black;
+  background-image: url(https://gstatic.com/classroom/themes/legacy/152_pen_music_brown.jpg); 
+  /*background: linear-gradient(rgba(32,33,36,0) 30%,rgba(32,33,36,0.8));*/
+}
+
+
+.wall h1{
+  z-index: 100;
+  position: absolute;
+  color: rgb(255, 255, 255);
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  right: 83%;
+  top: 130px;
+}
+
+.wall h3{
+  z-index: 100;
+  position: absolute;
+  color: rgb(255, 255, 255);
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 23px;
+  font-weight: bold;
+  right: 90%;
+  top: 190px;
+}
+
+.announce-post {
+  width:64.62%; 
+  position: relative; 
+  float:right;
+  right: 8.6%;
+  top:10%;
+  height: 72px; padding-top: 11px; 
+  margin-bottom: 37px;
+  margin-left: 13.5%;
+  background: white;
+  border-radius: 8px;
+  box-shadow:-1px 2px 3px rgba(39, 38, 38, 0.3),
+  1px 2px 4px rgba(39, 38, 38, 0.3);
+}
+
+.profile-pic{
+  float:left; 
+  top:0%;
+  padding-left: 9px; 
+  padding-bottom: 15px;
+  padding-right: 8px;
+  width: 70px; 
+  height: 70px;
+  margin-bottom: 7px;
+}
+
+.User{
+ float:left;
+ padding-left: 24px; 
+ padding-bottom: 5px;
+ padding-right: 7px;
+ padding-top: 8px;
+ width: 70px; 
+ height: 70px;
+}
+
+
+.announce-input{
+  float:left; 
+  padding-top: 22px;
+  font-family: "Roboto",Helvetica,Arial,sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  width: 608px;
+  height: 22px;
+  border: none;
+}
+
+.announce-input:active{
+  border-color: #ffffff;
+}
+
+.send{
+  border:none; 
+  float: right;
+  margin-right: 47px;
+  background-color:white; 
+  height:20px; width: 20px; 
+  padding-top: 5px; 
+  opacity:0.6;
+}
+
+.item {
+  width:64.62%;
+  position: relative; 
+  float:right;
+  right: 8.6%;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 50px;
+  background: white;
+  border-radius: 8px;
+}
+
+.post-user{
+  display:inline-block;
+  margin-top: 12px;
+}
+
+.you{
+  letter-spacing: .01785714em;
+  font-family: "Google Sans",Roboto,Arial,sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.25rem;
+  color: #3c4043;
+  margin-top: 12px;margin-bottom: 4px;
+}
+
+.time-post{
+  letter-spacing: .025em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  color: #5f6368;
+  margin-top: 0px;
+  margin-bottom: 0px;
+   
+}
+
+.val{
+  display: inline-block;
+  width: 87%; 
+  margin: 0px 12px 20px 32px; 
+  letter-spacing: .01428571em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  color: #3c4043;
+}
+
+.delete-button-div{
+  margin-top: 25px;
+  margin-right: 8px;
+  float: right;
+  opacity: 0.7
+}
+
+.delete-button{
+  height: 40px;
+  width: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: #ffffff
+}
+
+form {
+  text-align: center;
+  margin-left: 20px
+}
+
+
+::placeholder {
+  color: grey;
+  opacity: 1;
+}
+.comment{
+  width:97%;
+  color: rgba(0,0,0,.87);
+  font-family: "Roboto",Helvetica,Arial,sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  margin: 16px 24px 16px 0;
+  border-radius: 4vh;
+  background-color: rgb(200, 213, 213);
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  min-height: 40px;
+  float: right;
+}
+
+#txtSearch{
+  border: none;
+  width:75%;
+}
+
+#txtSearch:active{
+  border-color: #ffffff;
+}
+
+.comments{
+  min-height: 44px;
+  border-top: solid 1px;
+  border-color: #e0e0e0;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  margin-bottom: 10px
+}
+
+.comment-box{
+  min-height:112px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: solid 1px #e0e0e0;
+  margin-top: 0px; 
+  border-width: 1px
+ }
+
+.enter-comment{
+  display: grid;
+  grid-template-columns:90px 1fr;
+  font-size: 20px; 
+  height: 72.96px; 
+  border-top:solid; 
+  border-color:#e0e0e0;
+  border-width: 1px;
+  margin: 0px
+}
+
+.Comment-number{
+  vertical-align:middle
+}
+
+.ppl{
+  height: 24px; 
+  width: 24px;
+  margin:0px 0px 0 24px;
+}
+
+.User-comment-pic{
+  float:left; height: 50px;
+  margin: 12px 15px 0 25px;
+  width: 50px
+}
+
+.Usercommentpic{
+  vertical-align: top; 
+  display: inline-block;
+  padding-right: 12px
+}
+
+.User-comment-details{
+ margin-top: 12px;
+ padding-left: 16px;
+ display: inline-block
+}
+
+.you-comment{
+ display: inline-block;
+ margin: 0 8px 0 0;
+ letter-spacing: .01428571em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  color: #3c4043
+}
+
+.time-comment{
+  letter-spacing: .025em;
+  font-family: Roboto,Arial,sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1rem;
+  color: #5f6368;
+  margin-top: 0px;margin-bottom: 0px;
+  display: inline-block
+}
+
+.input-comment{
+  margin: 0px 0px 16px 0px;
+  width:90%
+}
+
+.comment-button{
+  display: inline; float:right;
+  margin-right: 2px; margin-top: 3px;
+  height: 24px;
+  width: 24px;
+  border: none;
+  border-radius: 50%;
+  background-color: #ffffff;
+  opacity: 0.7
+}
