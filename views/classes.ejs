@@ -1,0 +1,194 @@
+<!--name of class, class teacher name -->
+
+
+    <!DOCTYPE html>
+ 
+    <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+      <link href="http://fonts.cdnfonts.com/css/roboto" rel="stylesheet">
+      <link rel="stylesheet" href="css/styles.css">
+      
+      <title>
+          Homepage
+        </title>
+        
+      <style>
+        p{
+          font-family: Roboto, sans-serif;
+          font-weight: 400;
+        }
+      </style>
+    </head>
+     
+    <body>
+        <div class="header" id="heading">
+          <input
+               type="submit"
+              id="btnSearch"
+              name="logout"
+               value="Logout"
+               onclick="ex()"
+               style="float:right; margin:10px; border: none; border-radius: 50%; background-color: blueviolet;"
+/>
+
+          <!--  <button class="menu"><img src="icons8-menu.svg" alt="menu"></button>-->
+            
+   <div class="dropdown">
+    <button class="select1" type="button" data-toggle="dropdown" style="float:right; position: relative; 
+    top: 0px; right: 55px; color: black; font-family:Roboto; font-size: 23px; font-weight: 700; border:none; background-color: white;">+
+    <span class="caret" style="float:right;"></span></button>
+    <ul class="dropdown-menu" style="float:right;">
+      <li><button class="add" type="button" name="answer" value="Show Div" style="font-family: Roboto; border: none; text-align: center;" onclick="showcreateDiv()">Create</button></li>
+      <li><button class="add" type="button" name="answer" value="Show Div" style="font-family: Roboto;border: none; text-align: center;"  onclick="showjoinDiv()" >Join</button>
+     </li>
+    </ul>
+  </div>
+  <style>
+   
+  </style>
+</div>
+            </div>
+            
+           
+    </div>
+
+     <!--JOIN FORM-->
+ <div
+ class="join-class"
+ id="join-class"
+ style="
+ display:none;
+   position: absolute;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   border: 1px solid #e0e0e0;
+   padding: 10px;
+ "
+>
+ <form name="JoinForm" action="/join" method="POST">
+   <input
+     id="search"
+     class="codebox"
+     type="text"
+     placeholder="Add Class Code"
+     name="code"
+     style="display: block; margin-bottom: 7px;"
+   />
+   <input
+   id="Joinclass"
+   class="Join"
+   type="submit"
+   placeholder="Join" value="Join"
+   name="Joinbtn"
+   style="display: block; margin-bottom: 7px"
+ />
+ </form>
+</div>
+<!---->
+
+
+<!--CREATE FORM-->
+<div
+
+class="add-class"
+id="create-class"
+style="
+display:none;
+ position: absolute;
+ left: 50%;
+ top: 50%;
+ transform: translate(-50%, -50%);
+ border: 1px solid #e0e0e0;
+ padding: 10px;
+"
+>
+<form name="CreateForm" action="/create" method="POST">
+ <input
+   id="searchA"
+   class="searchbox6"
+   type="text"
+   placeholder="Class name (required)"
+   name="title"
+   style="display: block;margin-bottom: 7px"
+ />
+ <input
+   id="searchAminus"
+   class="searchbox7"
+   type="text"
+   placeholder="Section"
+   name="num_Aminus"
+   style="display: block;margin-bottom: 7px"
+ />
+ <input
+   id="searchBplus"
+   class="searchbox8"
+   type="text"
+   placeholder="Subject"
+   name="num_Bplus"
+   style="display: block; margin-bottom: 7px"
+ />
+ <input
+   id="searchBplus"
+   class="Create"
+   type="submit"
+   placeholder="Create" value="Create"
+   name="Createbtn"
+   style="display: block; margin-bottom: 7px"
+ />
+</form>
+</div>
+<!---->
+
+
+ 
+<div style="margin-top:70px; display:flex;">
+  <% for(let j=0; j<Class.length; j++){ %>
+    
+    <div class = "classes"  onclick="window.location.href = 'http://localhost:3001/class/<%=(j+1) %>';"
+    style=" cursor: pointer; margin: 24px;
+    border: 1px solid #e0e0e0; width: 350px; height: 294px; 
+    position: relative;
+    text-align: left; border-radius: 3%;" > 
+        <div class="Classname" style="display: inline; max-height:100px;">
+        <p style="float:top; font-family: Roboto; font-weight: 600; font-size: 20px; margin: 16px;"> <%=Classname[j].title %> </p>   
+            
+        </div>
+        <div class="Classtutor"> 
+           <p tyle="float:top; font-family: Roboto; font-weight: 400; font-size: 14px; margin: 0px 15px 15px 0px"> <%=classtutor[j]%></p> 
+        </div>          
+    </div>
+<%  } %>
+</div>
+        
+      
+     
+<!--to display form-->
+<script>
+  function showcreateDiv() {
+    document.getElementById('create-class').style.display = "block";
+  }
+  
+  function showjoinDiv() {
+    document.getElementById('join-class').style.display = "block";
+  }
+  
+ function ex() {
+      window.location = "/logout";
+    }
+  
+//  function classRedirect() {
+//       window.location = "/logout";
+//     }
+  
+  </script>
+         
+    </body>
+     
+    </html>

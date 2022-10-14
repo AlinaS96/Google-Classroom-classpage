@@ -4,104 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="css/Style.css">  <!--styles.css-->
+    <link rel="stylesheet" href="css/styles.css">  
    
     <title>Google Classroom Page</title>
 </head>
 <body>
     <div class="header" id="heading">
             <button class="menu"><img src="icons8-menu.svg" alt="menu"></button>
-            <h1 class="class-name">Class-ABC</h1>
-            <h3 class="section">Batch-X</h3>
+            <h1 class="class-name"><%=classTitle %></h1>  <!--class title  -->
+            <h3 class="section"><%=teacherName%></h3> <!-- teacher name -->
     </div>
-<script>
-    
-</script>
 <div class="box">
-
     <div class="wall">
-        <!--<img src="featured.jpg" alt="">-->
-        <h1 class="name">Class-ABC</h1>
-            <h3 class="sect">Batch-X</h3>
+        <h1 class="name"><%=classTitle %></h1>
+            <h3 class="sect"><%=teacherName%></h3>
     </div>
     <div class="announce-post">
         <form  action="/"method="POST">
             <img class="profile-pic" src="profile-pic.jpg" alt="user-picture">
             <input class="announce-input" type="text" name="newItem" placeholder="Announce something to your class">
-            <button class="send" type="submit" name="list" value="<%= listTitle %>"><img src="send.png" ></button>
+            <button class="send" type="submit" name="list" value="val"><img src="send.png" ></button>
         </form>
     </div>
-   
-    
-    <% for(let i=0; i<newListItems.length;i++){ %>
-        <div class="item">
-            <img class="User" src="profile-pic.jpg" alt="User">
-          <div class="post-user">
-            
-            <p class="you">You </p>
-            <p class = "time-post"><%= Timing%></p>          
-            
-          </div>
-            <div class = "delete-button-div">
-                <button class="delete-button"onclick="window.location.href = 'http://localhost:3001/delete/<%=i %>';" 
-                    type = "submit" name = "delete" value = "<%= i%>"  placeholder="Delete">
-                    <img src="icons8-menu-vertical-30.png" alt="menu">
-                </button>
+   <% if(postContent!=="undefined"){ %>
+        <% for(let i=0; i<postContent.length;i++){ %>
+            <div class="item">
+                <img class="User" src="profile-pic.jpg" alt="User">
+            <div class="post-user">
+                <p class="you"><%=users[i].username%></p>
+                <p class = "time-post"><%= Timing_post[i]%></p>          
             </div>
-            <p class="val"><%= newListItems[i] %></p>
-            <% if(Comments[i].length!==0){ %>
-            <div class="comment-box">
-                <p class="Comment-number"><img class="ppl"src="supervisor+account+24px-131985193920636295.png" alt="ppl"> <%=Comments[i].length %> class comments</p>
-                <% for(let j=0; j<Comments[i].length; j++){ %>
-                    <div class = "comments"> 
-                        <div class="Usercommentpic">
-                            <img class="User-comment-pic" src="profile-pic.jpg" alt="User">
+                <form class = "delete-button-div" action="/delete/<%=post_id[i]%>"method="POST">
+                    <button class="delete-button"  
+                    onclick="window.location.href = 'http://localhost:3001/delete/<%=post_id[i] %>';"
+                        type = "submit" name = "delete" value = "<%= i%>"  placeholder="Delete">
+                        <img src="icons8-menu-vertical-30.png" alt="menu">
+                    </button>
+                </form>
+                <p class="val"><%= postContent[i] %></p>
+                <%if(Comments.length!==0){%>
+                    <% if(Comments[i].length!==0){ %>
+                        <div class="comment-box">
+                        <p class="Comment-number"><img class="ppl"src="supervisor+account+24px-131985193920636295.png" alt="ppl"> <%=Comments[i].length %> class comments</p>
+                        <% for(let j=0; j<Comments[i].length; j++){ %>
+                            <div class = "comments"> 
+                                <div class="Usercommentpic">
+                                    <img class="User-comment-pic" src="profile-pic.jpg" alt="User">
+                            </div>
+                            <div class="User-comment-details">
+                                 <p class="you-comment"><%=comment_user[i][j]%> <!--the commenting users is the size of comments-->
+                                 <p class = "time-comment"><%= Timing_comment[i][j]%></p>
+                                 <p class="input-comment"><%= Comments[i][j] %></p>   
+                            </div>          
+                            </div>
+                        <%  } %>
                         </div>
-                         <div class="User-comment-details">
-                             <p class="you-comment">You 
-                     <p class = "time-comment"><%= Timing%></p></p>
-                    
-                     <p class="input-comment"><%= Comments[i][j] %></p>   
-                                 
-                   </div>          
-                       
-                  </div>
-                <%  }%>
-            </div>
-            <% } %>
-
-            <form class="enter-comment"  action="/<%= i %>" method="POST" >
-                <div class="Usercommentpic">
-                    <img class="User-comment-pic" src="profile-pic.jpg" alt="User">
-                </div>
-                <div class="comment">
-                    <input type="text" id="txtSearch" name=newComment onkeypress="searchKeyPress(event)"  />
-                    <button class="comment-button" type="submit" id="btnSearch" name=comment value="clicked" >
-                        <img class="comment-button"src="send.png" alt="menu">
-                    </button>  
-                </div>
-             </form>
-
-            <!--get the value of input in form to button, and -->
-            <script>
-                function searchKeyPress(e) {
-                // look for window.event in case event isn't passed in
-                    e = e || window.event;
-                    if (e.keyCode == 13) {
-                        document.getElementById("btnSearch").click();
-                        return false;
+                    <% } %>
+                 <% } %>
+                <form class="enter-comment"  action="/<%=post_id[i] %>" method="POST" >
+                    <div class="Usercommentpic">
+                        <img class="User-comment-pic" src="profile-pic.jpg" alt="User">
+                    </div>
+                    <div class="comment">
+                        <input type="text" id="txtSearch" name=newComment onkeypress="searchKeyPress(event)"  />
+                        <button class="comment-button" type="submit" id="btnSearch" name=comment value="clicked" >
+                            <img class="comment-button"src="send.png" alt="menu">
+                        </button>  
+                    </div>
+                </form>
+                <script>
+                    function searchKeyPress(e) {
+                        e = e || window.event;
+                        if (e.keyCode == 13) {
+                            document.getElementById("btnSearch").click();
+                            return false;
+                        }
+                            return true;
                     }
-                        return true;
-                }
+                </script>
 
-                // function someFunction(i) {
-                // window.location = "/<%=i%>";
-            //  }
-            </script>
-
-        </div>
+            </div>
+        <% } %>
     <% } %>
-
 
 </div> 
 
