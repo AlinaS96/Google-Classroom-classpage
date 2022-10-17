@@ -9,10 +9,12 @@ const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
+//app.use(express.static('public'));
+
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('views','views')
 app.set('view engine', "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("public"));
 //get random characters
 //require('crypto').randomBytes(64).toString('hex')
 
@@ -31,7 +33,7 @@ app.post('/register', async (req,res)=>{
         const salt = await bcrypt.genSalt() 
         const hashedPassword = await bcrypt.hash(req.body.password, salt)
       
-            client.query('INSERT INTO Users( email,username,password) VALUES($1,$2,$3) RETURNING *',[req.body.email,req.body.username,hashedPassword],(err, res)=>{
+            client.query('INSERT INTO Users(email,username,password) VALUES($1,$2,$3) RETURNING *',[req.body.email,req.body.username,hashedPassword],(err, res)=>{
                 if(!err){
                    res.send(res.rows);
 
@@ -85,18 +87,14 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/homepage',authenticateToken,(req,res)=>{
- res.render('homepage.ejs');
-});
-
   
-
 app.get('/logout',authenticateToken,(req,res)=>{
     res.clearCookie("access-token");
    // res.sendStatus(204);
     res.redirect('/login');
     //res.end()
 });
+
 
 //get all classes attended by user
 app.get('/',authenticateToken, async function(req, res){
@@ -112,16 +110,20 @@ app.get('/',authenticateToken, async function(req, res){
     Classname.push(title.rows[0]);
     }
    // console.log(classtutor,  'here it is')
-    tutorName=[];
+    tutorName = [];
     for(let x = 0; x < attending.rows.length; x++){
         let users = await client.query('SELECT username FROM Users WHERE id=$1',[classtutor[x].teacher_id]);
        tutorName.push(users.rows[0].username);
     }
+    //get current User character
+    let user = await client.query('SELECT username FROM Users WHERE id=$1',[req.user.id]);
     console.log(tutorName);
-    res.render("classes",
-    {Classname:Classname,
-    classtutor:tutorName,
-    Class:attending.rows});
+    res.render("classes",{
+        Classname: Classname,
+        classtutor: tutorName,
+        Class: attending.rows,
+        user: (user.rows[0].username).charAt(0)
+    });
 });
 
 
@@ -161,13 +163,13 @@ app.post('/join',authenticateToken,async function(req, res){
 
 
 
-//to get a class
-app.get("/class/:id",authenticateToken, async function(req, res){
+//to get a class //removed class
+app.get("/:id",authenticateToken, async function(req, res){
 
     let posts = await client.query('SELECT id, user_id, content, posted_date FROM posts WHERE class_id=$1',[req.params.id]);
     let Comments = await client.query('SELECT user_id, content, commented_date, post_id FROM comments WHERE class_id=$1',[req.params.id]);
-    let classDetails= await client.query('SELECT title, teacher_id FROM class WHERE id=$1',[req.params.id]);
-    let classTutor= await client.query('SELECT username FROM Users WHERE id=$1',[classDetails.rows[0].teacher_id]);
+    let classDetails = await client.query('SELECT title, teacher_id FROM class WHERE id=$1',[req.params.id]);
+    let classTutor = await client.query('SELECT username FROM Users WHERE id=$1',[classDetails.rows[0].teacher_id]);
      
     let post_users = [];
     for(let x = 0; x < posts.rows.length; x++){
@@ -280,7 +282,8 @@ app.get("/class/:id",authenticateToken, async function(req, res){
         Timing_comment: commdate,
         post_id: post_Id,
         classTitle: classDetails.rows[0].title,
-        teacherName: classTutor.rows[0].username
+        teacherName: classTutor.rows[0].username,
+        classid: req.params.id
     });
 
 
@@ -289,21 +292,23 @@ app.get("/class/:id",authenticateToken, async function(req, res){
 
 
 
-//to add a post  //removed awair from all insert statements
-app.post("/",authenticateToken,async function(req, res){
+//to add a post  //removed awair from all insert statements , /added postid
+app.post("/:id",authenticateToken,async function(req, res){
+    //console.log(req.params.class_id, 'here i am');
+    let class_index=parseInt(req.params.id);
     var post = req.body.newItem;
-    var date=new Date().toLocaleString();
+    var date=new Date().toLocaleString(); //let Id=req.params.id;
     if(req.body.list !== "undefined"){
-       if(post || post.length!==0){
-       const new_post= client.query('INSERT INTO posts( user_id,content,posted_date) VALUES($1,$2,$3) RETURNING *',[req.user.id,post,date])//,(err, res)=>{
-        //     if(!err){
-        //         console.log(new_post);
+       if(post || post.length!==0){//just added class id
+       let new_post = client.query('INSERT INTO posts(class_id,user_id,content,posted_date) VALUES($1,$2,$3,$4) RETURNING *',[class_index ,req.user.id,post,date],(err, res)=>{
+            if(!err){
+                console.log(new_post);
 
-        // }else{
-        //         res.send(err.message);
-        //     }
-        // })
-        res.redirect("/");
+        }else{
+                res.send(err.message);
+            }
+        })
+       res.redirect(`/${req.params.id}`);
 
        }
     }
@@ -311,9 +316,9 @@ app.post("/",authenticateToken,async function(req, res){
 });
 
 
-//to comment on a post with id
-app.post("/:id", authenticateToken,async function(req, res){
-    var index = parseInt(req.params.id)
+//to comment on a post with id, /:id
+app.post("/:classid/:postid", authenticateToken,async function(req, res){
+  //  var index = parseInt(req.params.postid);
     var val = req.body.comment;
     if(val!=="undefined"){
         var comment = req.body.newComment; 
@@ -321,7 +326,9 @@ app.post("/:id", authenticateToken,async function(req, res){
         //fetch comments.rows[0] from database
         
         let date=new Date().toLocaleString();
-        client.query('INSERT INTO comments( user_id,post_id,content, commented_date) VALUES($1,$2,$3,$4) RETURNING *',[req.user.id,index,comment,date],(err, res)=>{
+        //just added class id
+        //dont matter if passing int or string in database
+        client.query('INSERT INTO comments( class_id,user_id,post_id,content, commented_date) VALUES($1,$2,$3,$4,$5) RETURNING *',[req.params.classid,req.user.id,req.params.postid,comment,date],(err, res)=>{
             if(!err){
                 console.log(res.rows);
 
@@ -330,7 +337,7 @@ app.post("/:id", authenticateToken,async function(req, res){
             } 
         })
        }
-        res.redirect("/");
+        res.redirect(`/${req.params.classid}`); //pass integer to : in url
    
     }
 });
@@ -338,7 +345,7 @@ app.post("/:id", authenticateToken,async function(req, res){
 
 
 //delete a post with id
-app.post("/delete/:id",authenticateToken, async function(req, res){
+app.post("/:classid/delete/:id",authenticateToken, async function(req, res){
     if(req.body.delete!="undefined"){   
         var index = parseInt(req.params.id); 
         let delPost=await client.query('DELETE  FROM posts where id=$1',[index],(err, res)=>{
@@ -350,7 +357,7 @@ app.post("/delete/:id",authenticateToken, async function(req, res){
             }
         })
     }
-    res.redirect("/");
+    res.redirect(`/${req.params.classid}`);
 });
 
 
@@ -385,4 +392,6 @@ jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
 app.listen(3001, function(){
     console.log("Server started on port[:3001] at: localhost");
 });
+
+
 
