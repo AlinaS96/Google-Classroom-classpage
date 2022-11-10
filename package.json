@@ -1,12 +1,12 @@
 {
-  "name": "todolist-v1",
+  "name": "classroom1",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Tomislav Balabanov",
+  "author": "Alina Soomro",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
