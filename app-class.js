@@ -15,8 +15,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('views','views')
 app.set('view engine', "ejs");
-//get random characters
-//require('crypto').randomBytes(64).toString('hex')
 
 
 
@@ -64,12 +62,6 @@ app.post('/login', async (req, res) => {
     const pwd = user.rows[0].password;
     const match = await bcrypt.compare(password,pwd);
     if(match){
-    // jwt.sign({"username":user.rows[0].username}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30s' }, (err, token) => {
-    //   res.json({
-    //     token
-    //   });
-    // });
-    // }
     const accessToken = createTokens(user.rows[0]);
 
       res.cookie("access-token", accessToken, {
@@ -100,22 +92,19 @@ app.get('/logout',authenticateToken,(req,res)=>{
 app.get('/',authenticateToken, async function(req, res){
     
     let attending = await client.query('SELECT class_id FROM class_users where user_id=$1',[req.user.id]);
-   // console.log(attending , 'here'); //attending works fine
     let Classname=[];let classtutor=[];
     for(let i=0;i<attending.rows.length;i++){   
      let  tutor= await client.query('SELECT teacher_id FROM class where id=$1',[attending.rows[i].class_id]);
     classtutor.push(tutor.rows[0]); 
-   //console.log(tutor, 'here');
      let  title= await client.query('SELECT title FROM class where id=$1',[attending.rows[i].class_id]);
     Classname.push(title.rows[0]);
     }
-   // console.log(classtutor,  'here it is')
     tutorName = [];
     for(let x = 0; x < attending.rows.length; x++){
         let users = await client.query('SELECT username FROM Users WHERE id=$1',[classtutor[x].teacher_id]);
        tutorName.push(users.rows[0].username);
     }
-    //get current User character
+  
     let user = await client.query('SELECT username FROM Users WHERE id=$1',[req.user.id]);
     console.log(tutorName);
     res.render("classes",{
@@ -127,7 +116,6 @@ app.get('/',authenticateToken, async function(req, res){
 });
 
 
-//create a class, pass title of class, displayclass code
 app.post('/create',authenticateToken, async function(req, res){
     let result           = '';
     let characters       = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -150,7 +138,7 @@ app.post('/create',authenticateToken, async function(req, res){
 });
 
 
-//join a class //pass class code
+//join a class 
 app.post('/join',authenticateToken,async function(req, res){
     //fetch class id for the class code
   if(req.body.Joinbtn!=="undefined"){
@@ -163,7 +151,7 @@ app.post('/join',authenticateToken,async function(req, res){
 
 
 
-//to get a class //removed class
+//to get a class 
 app.get("/:id",authenticateToken, async function(req, res){
 
     let posts = await client.query('SELECT id, user_id, content, posted_date FROM posts WHERE class_id=$1',[req.params.id]);
@@ -259,7 +247,6 @@ app.get("/:id",authenticateToken, async function(req, res){
     } 
 
 
-    //to get posts' date
     if( posts.rows.length !== 0 ){
         var postdate = new Array();
         for(let i=0; i<posts.rows.length; i++){
@@ -292,9 +279,8 @@ app.get("/:id",authenticateToken, async function(req, res){
 
 
 
-//to add a post  //removed awair from all insert statements , /added postid
+//to add a post  
 app.post("/:id",authenticateToken,async function(req, res){
-    //console.log(req.params.class_id, 'here i am');
     let class_index=parseInt(req.params.id);
     var post = req.body.newItem;
     var date=new Date().toLocaleString(); //let Id=req.params.id;
@@ -323,8 +309,6 @@ app.post("/:classid/:postid", authenticateToken,async function(req, res){
     if(val!=="undefined"){
         var comment = req.body.newComment; 
        if(comment|| !comment.length === 0 ) {
-        //fetch comments.rows[0] from database
-        
         let date=new Date().toLocaleString();
         //just added class id
         //dont matter if passing int or string in database
@@ -337,7 +321,7 @@ app.post("/:classid/:postid", authenticateToken,async function(req, res){
             } 
         })
        }
-        res.redirect(`/${req.params.classid}`); //pass integer to : in url
+        res.redirect(`/${req.params.classid}`); 
    
     }
 });
@@ -375,10 +359,7 @@ function authenticateToken(req, res, next) {
 
     if (!accessToken)
       return res.status(400).json({ error: "User not Authenticated!" });
-    //     const authHeader = req.headers['authorization']
-//     const token = authHeader && authHeader.split(' ')[1]
-//     if (token == null) return res.sendStatus(401)
-//token
+   
 jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
   console.log(err)
   if (err) return res.sendStatus(403)
